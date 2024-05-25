@@ -8,15 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var items = ["🐸", "🙉", "🐶", "🐷", "🐰", "🦊"]
+    @State var dropItems: [String] = []
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            HStack {
+                ForEach(items, id: \.self) { item in
+                    Text(item)
+                        .frame(minWidth: 60, minHeight: 60)
+                        .background(.gray)
+                        .draggable(item)
+                        .font(.system(size: 50))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+            }
+            DropView(title: "Drop items", items: $dropItems)
+                .dropDestination(for: String.self) { dropItem, location in
+                    dropItems += dropItem
+                    return true
+                }
         }
-        .padding()
     }
+
 }
 
 #Preview {
